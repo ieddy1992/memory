@@ -53,16 +53,25 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Visualizar credenciais"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="visualizarButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="credencialButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Cadastrar credenciais"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="credencialButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="cadastrarButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Cadastrar usu&#xe1;rio"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cadastrarButtonActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

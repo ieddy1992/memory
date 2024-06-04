@@ -27,9 +27,9 @@
               <EmptySpace pref="100" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Group type="102" attributes="0">
-                      <Component id="answerButton" min="-2" max="-2" attributes="0"/>
+                      <Component id="enterButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="answerButton2" min="-2" max="-2" attributes="0"/>
+                      <Component id="backButton" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Component id="answer1Field" alignment="0" max="32767" attributes="0"/>
                   <Component id="answer2Field" alignment="0" max="32767" attributes="0"/>
@@ -48,8 +48,8 @@
               <Component id="answer2Field" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="answerButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="answerButton2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="enterButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="backButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="recoveryButton" min="-2" max="-2" attributes="0"/>
@@ -63,15 +63,21 @@
     </Component>
     <Component class="javax.swing.JPasswordField" name="answer2Field">
     </Component>
-    <Component class="javax.swing.JButton" name="answerButton">
+    <Component class="javax.swing.JButton" name="enterButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Entrar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="enterButtonActionPerformed"/>
+      </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="answerButton2">
+    <Component class="javax.swing.JButton" name="backButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="voltar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="backButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="recoveryButton">
       <Properties>

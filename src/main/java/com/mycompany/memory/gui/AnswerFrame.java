@@ -6,19 +6,13 @@ package com.mycompany.memory.gui;
 
 import com.mycompany.memory.dao.UserDAO;
 import com.mycompany.memory.model.User;
-import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
-public class PasswordFrame extends javax.swing.JFrame {
+public class AnswerFrame extends javax.swing.JFrame {
 
-    private javax.swing.JPasswordField passwordField;
-    private javax.swing.JButton nextButton;
-    private javax.swing.JButton backButton;
-    private javax.swing.JButton recoveryButton;
     private User user;
 
-    public PasswordFrame(User user) {
-        this.user = user;
+    public AnswerFrame() {
         initComponents();
     }
 
@@ -31,80 +25,82 @@ public class PasswordFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        PasswordField = new javax.swing.JPasswordField();
-        nextButton = new javax.swing.JButton();
+        answer1Field = new javax.swing.JPasswordField();
+        answer2Field = new javax.swing.JPasswordField();
+        enterButton = new javax.swing.JButton();
         backButton = new javax.swing.JButton();
         recoveryButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        PasswordField.setText("jPasswordField1");
-
-        nextButton.setText("Proximo");
-        nextButton.addActionListener(new java.awt.event.ActionListener() {
+        enterButton.setText("Entrar");
+        enterButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nextButtonActionPerformed(evt);
+                enterButtonActionPerformed(evt);
             }
         });
 
-        backButton.setText("Voltar");
+        backButton.setText("voltar");
         backButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 backButtonActionPerformed(evt);
             }
         });
 
-        recoveryButton.setText("Esqueci minha senha");
-        recoveryButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                recoveryButtonActionPerformed(evt);
-            }
-        });
+        recoveryButton.setText("Esqueci minhas respostas");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(76, 76, 76)
+                .addContainerGap(100, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(nextButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                        .addComponent(enterButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(backButton))
-                    .addComponent(PasswordField)
-                    .addComponent(recoveryButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(70, Short.MAX_VALUE))
+                    .addComponent(answer1Field)
+                    .addComponent(answer2Field)
+                    .addComponent(recoveryButton, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE))
+                .addContainerGap(100, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(101, Short.MAX_VALUE)
-                .addComponent(PasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(nextButton, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(backButton, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(97, 97, 97)
+                .addComponent(answer1Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33)
+                .addComponent(answer2Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(enterButton)
+                    .addComponent(backButton))
                 .addGap(18, 18, 18)
                 .addComponent(recoveryButton)
-                .addGap(37, 37, 37))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void nextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextButtonActionPerformed
-        String password = new String(passwordField.getPassword());
-        UserDAO userDAO = new UserDAO();
+    private void enterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enterButtonActionPerformed
+        String resposta1 = answer1Field.getText();
+        String resposta2 = answer2Field.getText();
+        String login = ""; // Obter o login do usuário da tela de login
 
-        if (userDAO.validatePassword(password, user.getSenhaHash())) {
-            MainFrame mainFrame = new MainFrame(user);
-            mainFrame.setVisible(true);
+        UserDAO userDAO = new UserDAO();
+        boolean respostasCorretas = userDAO.verificarRespostasCorretas(login, resposta1, resposta2);
+
+        if (respostasCorretas) {
+            // Abrir a próxima tela (WelcomeFrame)
+            WelcomeFrame welcomeFrame = new WelcomeFrame();
+            welcomeFrame.setVisible(true);
             this.dispose();
         } else {
-            JOptionPane.showMessageDialog(this, "Senha incorreta - Contate o administrador do sistema");
-        }
-    }//GEN-LAST:event_nextButtonActionPerformed
+            JOptionPane.showMessageDialog(this, "Credenciais inválidas - Tente novamente", "Erro", JOptionPane.ERROR_MESSAGE);
+        }                            
+    }//GEN-LAST:event_enterButtonActionPerformed
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
         LoginFrame loginFrame = new LoginFrame();
@@ -112,15 +108,6 @@ public class PasswordFrame extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_backButtonActionPerformed
 
-    private void recoveryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recoveryButtonActionPerformed
-        RecoveryFrame recoveryFrame = new RecoveryFrame(user);
-        recoveryFrame.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_recoveryButtonActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -135,28 +122,29 @@ public class PasswordFrame extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(PasswordFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AnswerFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(PasswordFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AnswerFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(PasswordFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AnswerFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PasswordFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AnswerFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new PasswordFrame().setVisible(true);
+                new AnswerFrame().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPasswordField PasswordField;
+    private javax.swing.JPasswordField answer1Field;
+    private javax.swing.JPasswordField answer2Field;
     private javax.swing.JButton backButton;
-    private javax.swing.JButton nextButton;
+    private javax.swing.JButton enterButton;
     private javax.swing.JButton recoveryButton;
     // End of variables declaration//GEN-END:variables
 }
