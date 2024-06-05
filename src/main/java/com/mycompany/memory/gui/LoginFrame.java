@@ -4,17 +4,17 @@ import com.mycompany.memory.dao.UserDAO;
 import com.mycompany.memory.model.User;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LoginFrame extends JFrame {
-    private JTextField loginField;
-    private JButton okButton;
-    private UserDAO userDAO;
 
     public LoginFrame() {
-        userDAO = new UserDAO();
         initComponents();
     }
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -57,13 +57,22 @@ public class LoginFrame extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
-        String login = loginField.getText();
-        User user = userDAO.getUserByLogin(login);
+        String login = loginField.getText().trim();
+        UserDAO userDAO = new UserDAO();
+        User user = null;
+        try {
+            user = userDAO.getUserByLogin(login);
+        } catch (SQLException ex) {
+            Logger.getLogger(LoginFrame.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Erro ao acessar o banco de dados - Contate o administrador do sistema", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+
         if (user != null) {
-            new PasswordFrame(login).setVisible(true);
+            PasswordFrame passwordFrame = new PasswordFrame(user);
+            passwordFrame.setVisible(true);
             this.dispose();
         } else {
-            JOptionPane.showMessageDialog(this, "Usuário inválido - Contate o administrador do sistema");
+            JOptionPane.showMessageDialog(this, "Usuário inválido - Contate o administrador do sistema", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_loginButtonActionPerformed
     public static void main(String args[]) {
@@ -74,14 +83,12 @@ public class LoginFrame extends JFrame {
                     break;
                 }
             }
-        } catch (Exception ex) {
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new LoginFrame().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new LoginFrame().setVisible(true);
         });
     }
 

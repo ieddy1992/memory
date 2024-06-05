@@ -1,90 +1,139 @@
 package com.mycompany.memory.dao;
 
+import com.mycompany.memory.model.Credenciais;
 import com.mycompany.memory.model.User;
 import com.mycompany.memory.util.DatabaseConnection;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDAO {
-    public User getUserByLogin(String login) {
-        String query = "SELECT * FROM usuarios WHERE Login = ?";
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, login);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
+
+    // CRUD para tabela de usuários
+
+    public User getUserByLogin(String login) throws SQLException {
+        String sql = "SELECT * FROM usuarios WHERE Login = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, login);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
                     User user = new User();
-                    user.setId(resultSet.getInt("id"));
-                    user.setNome(resultSet.getString("Nome"));
-                    user.setLogin(resultSet.getString("Login"));
-                    user.setSenha(resultSet.getString("Senha"));
-                    user.setEmail(resultSet.getString("Email"));
-                    user.setTelefone(resultSet.getString("Telefone"));
-                    user.setCpf(resultSet.getString("CPF"));
-                    user.setPerguntaSecreta1(resultSet.getString("Pergunta_Secreta_1"));
-                    user.setPerguntaSecreta2(resultSet.getString("Pergunta_Secreta_2"));
-                    user.setAdmin(resultSet.getBoolean("isAdmin"));
+                    user.setId(rs.getInt("id"));
+                    user.setNome(rs.getString("Nome"));
+                    user.setLogin(rs.getString("Login"));
+                    user.setSenha(rs.getString("Senha"));
+                    user.setEmail(rs.getString("Email"));
+                    user.setTelefone(rs.getString("Telefone"));
+                    user.setCpf(rs.getString("CPF"));
+                    user.setPerguntaSecreta1(rs.getString("Pergunta_Secreta_1"));
+                    user.setPerguntaSecreta2(rs.getString("Pergunta_Secreta_2"));
+                    user.setAdmin(rs.getBoolean("isAdmin"));
                     return user;
                 }
             }
-        } catch (SQLException ex) {
-            System.err.println("Erro ao obter usuário por login: " + ex.getMessage());
         }
         return null;
     }
 
-    public boolean verificarSenhaCorreta(String login, String senha) {
-        String query = "SELECT id FROM usuarios WHERE Login = ? AND Senha = ?";
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, login);
-            preparedStatement.setString(2, senha);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                return resultSet.next(); // Retorna true se encontrar o login e senha correspondentes
-            }
-        } catch (SQLException ex) {
-            System.err.println("Erro ao verificar senha correta: " + ex.getMessage());
-            return false;
+    public boolean addUser(User user) throws SQLException {
+        String sql = "INSERT INTO usuarios (Nome, Login, Senha, Email, Telefone, CPF, Pergunta_Secreta_1, Pergunta_Secreta_2, isAdmin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, user.getNome());
+            stmt.setString(2, user.getLogin());
+            stmt.setString(3, user.getSenha());
+            stmt.setString(4, user.getEmail());
+            stmt.setString(5, user.getTelefone());
+            stmt.setString(6, user.getCpf());
+            stmt.setString(7, user.getPerguntaSecreta1());
+            stmt.setString(8, user.getPerguntaSecreta2());
+            stmt.setBoolean(9, user.isAdmin());
+            return stmt.executeUpdate() > 0;
         }
     }
 
-    public boolean verificarPerguntasSecretas(String login, String resposta1, String resposta2) {
-        String query = "SELECT id FROM usuarios WHERE Login = ? AND Pergunta_Secreta_1 = ? AND Pergunta_Secreta_2 = ?";
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, login);
-            preparedStatement.setString(2, resposta1);
-            preparedStatement.setString(3, resposta2);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                return resultSet.next();
-            }
-        } catch (SQLException ex) {
-            System.err.println("Erro ao verificar perguntas secretas: " + ex.getMessage());
-            return false;
+    public boolean updateUser(User user) throws SQLException {
+        String sql = "UPDATE usuarios SET Nome = ?, Login = ?, Senha = ?, Email = ?, Telefone = ?, CPF = ?, Pergunta_Secreta_1 = ?, Pergunta_Secreta_2 = ?, isAdmin = ? WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, user.getNome());
+            stmt.setString(2, user.getLogin());
+            stmt.setString(3, user.getSenha());
+            stmt.setString(4, user.getEmail());
+            stmt.setString(5, user.getTelefone());
+            stmt.setString(6, user.getCpf());
+            stmt.setString(7, user.getPerguntaSecreta1());
+            stmt.setString(8, user.getPerguntaSecreta2());
+            stmt.setBoolean(9, user.isAdmin());
+            stmt.setInt(10, user.getId());
+            return stmt.executeUpdate() > 0;
         }
     }
 
-    public boolean adicionarUsuario(User user) {
-        String query = "INSERT INTO usuarios (Nome, Login, Senha, Email, Telefone, CPF, Pergunta_Secreta_1, Pergunta_Secreta_2, isAdmin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, user.getNome());
-            preparedStatement.setString(2, user.getLogin());
-            preparedStatement.setString(3, user.getSenha());
-            preparedStatement.setString(4, user.getEmail());
-            preparedStatement.setString(5, user.getTelefone());
-            preparedStatement.setString(6, user.getCpf());
-            preparedStatement.setString(7, user.getPerguntaSecreta1());
-            preparedStatement.setString(8, user.getPerguntaSecreta2());
-            preparedStatement.setBoolean(9, user.isAdmin());
-            preparedStatement.executeUpdate();
-            return true;
-        } catch (SQLException ex) {
-            System.err.println("Erro ao adicionar usuário: " + ex.getMessage());
-            return false;
+    public boolean deleteUser(int userId) throws SQLException {
+        String sql = "DELETE FROM usuarios WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
+    // CRUD para tabela de credenciais
+
+    public List<Credenciais> getCredenciaisByUserId(int usuarioId) throws SQLException {
+        String sql = "SELECT * FROM acessos WHERE usuario_id = ?";
+        List<Credenciais> credenciaisList = new ArrayList<>();
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, usuarioId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Credenciais credenciais = new Credenciais();
+                    credenciais.setId(rs.getInt("id"));
+                    credenciais.setUsuarioId(rs.getInt("usuario_id"));
+                    credenciais.setSistema(rs.getString("Sistema"));
+                    credenciais.setLogin(rs.getString("Login"));
+                    credenciais.setSenha(rs.getString("Senha"));
+                    credenciaisList.add(credenciais);
+                }
+            }
+        }
+        return credenciaisList;
+    }
+
+    public boolean addCredenciais(Credenciais credenciais) throws SQLException {
+        String sql = "INSERT INTO acessos (usuario_id, Sistema, Login, Senha) VALUES (?, ?, ?, ?)";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, credenciais.getUsuarioId());
+            stmt.setString(2, credenciais.getSistema());
+            stmt.setString(3, credenciais.getLogin());
+            stmt.setString(4, credenciais.getSenha());
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
+    public boolean updateCredenciais(Credenciais credenciais) throws SQLException {
+        String sql = "UPDATE acessos SET Sistema = ?, Login = ?, Senha = ? WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, credenciais.getSistema());
+            stmt.setString(2, credenciais.getLogin());
+            stmt.setString(3, credenciais.getSenha());
+            stmt.setInt(4, credenciais.getId());
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
+    public boolean deleteCredenciais(int credenciaisId) throws SQLException {
+        String sql = "DELETE FROM acessos WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, credenciaisId);
+            return stmt.executeUpdate() > 0;
         }
     }
 }

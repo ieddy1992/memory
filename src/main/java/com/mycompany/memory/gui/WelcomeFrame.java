@@ -1,8 +1,9 @@
-
 package com.mycompany.memory.gui;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import com.mycompany.memory.model.User;
-
+import com.mycompany.memory.dao.UserDAO;
 
 public class WelcomeFrame extends javax.swing.JFrame {
 
@@ -12,11 +13,7 @@ public class WelcomeFrame extends javax.swing.JFrame {
         this.user = user;
         initComponents();
     }
-    private boolean isAdmin() {
-        return true;
-    }
 
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -77,27 +74,52 @@ public class WelcomeFrame extends javax.swing.JFrame {
     private void visualizarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_visualizarButtonActionPerformed
         CredenciaisFrame credenciaisFrame = new CredenciaisFrame();
         credenciaisFrame.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_visualizarButtonActionPerformed
 
     private void credencialButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_credencialButtonActionPerformed
-        if (isAdmin()) {
+        UserDAO userDAO = new UserDAO();
+        User user = null;
+        try {
+            user = userDAO.getUserByLogin(this.user.getLogin());
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao acessar o banco de dados - Contate o administrador do sistema", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (user.isAdmin()) {
             AdicionarFrame adicionarFrame = new AdicionarFrame();
             adicionarFrame.setVisible(true);
+            this.dispose();
         } else {
-            JOptionPane.showMessageDialog(this, "Apenas administradores podem cadastrar credenciais.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Você não tem permissão para cadastrar credenciais.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_credencialButtonActionPerformed
 
     private void cadastrarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastrarButtonActionPerformed
-        if (isAdmin()) {
+        UserDAO userDAO = new UserDAO();
+        User user = null;
+        try {
+            user = userDAO.getUserByLogin(this.user.getLogin());
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao acessar o banco de dados - Contate o administrador do sistema", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (user.isAdmin()) {
             CadastroFrame cadastroFrame = new CadastroFrame();
             cadastroFrame.setVisible(true);
+            this.dispose();
         } else {
-            JOptionPane.showMessageDialog(this, "Apenas administradores podem cadastrar usuários.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Você não tem permissão para cadastrar usuários.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_cadastrarButtonActionPerformed
 
-    public static void main(String args[]) {
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton cadastrarButton;
+    private javax.swing.JButton credencialButton;
+    private javax.swing.JButton visualizarButton;
+    // End of variables declaration//GEN-END:variables
+public static void main(String args[]) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -105,28 +127,18 @@ public class WelcomeFrame extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(WelcomeFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(WelcomeFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(WelcomeFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(WelcomeFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 
-    java.awt.EventQueue.invokeLater ( new Runnable() {
-            
+        // Criando um usuário fictício para passar para o WelcomeFrame
+        User user = new User();
+        user.setLogin("username"); // Substitua "username" pelo login correto
+        user.setAdmin(true); // Indique se o usuário é um administrador
 
-    public void run() {
-        new WelcomeFrame().setVisible(true);
+        // Criando e exibindo o WelcomeFrame com o usuário fictício
+        java.awt.EventQueue.invokeLater(() -> {
+            new WelcomeFrame(user).setVisible(true);
+        });
     }
-});
-    }
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton cadastrarButton;
-    private javax.swing.JButton credencialButton;
-    private javax.swing.JButton visualizarButton;
-    // End of variables declaration//GEN-END:variables
 }

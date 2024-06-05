@@ -1,24 +1,22 @@
 package com.mycompany.memory.gui;
 
-import javax.swing.*;
-import com.mycompany.memory.dao.UserDAO;
 import com.mycompany.memory.model.User;
-import javax.swing.JOptionPane;
+
+import javax.swing.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PasswordFrame extends JFrame {
 
     private JPasswordField passwordField;
-    private JButton forgotPasswordButton, nextButton, backButton;
-    private String login;
-    private UserDAO userDAO;
+    private final User user;
 
-    public PasswordFrame(String login) {
-        this.login = login;
-        userDAO = new UserDAO();
+    public PasswordFrame(User user) {
+        this.user = user;
         initComponents();
+        passwordField = new javax.swing.JPasswordField();
     }
 
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -85,19 +83,23 @@ public class PasswordFrame extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void nextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextButtonActionPerformed
-        String senha = new String(passwordField.getPassword());
-        User user = userDAO.getUserByLogin(login);
-        if (user != null && senha.equals(user.getSenha())) {
-            new AnswerFrame(login).setVisible(true);
+    String enteredPassword = new String(passwordField.getPassword());
+    try {
+        if (user != null && enteredPassword.equals(user.getSenha())) {
+            AnswerFrame answerFrame = new AnswerFrame(user);
+            answerFrame.setVisible(true);
             this.dispose();
         } else {
-            JOptionPane.showMessageDialog(this, "Senha inválida - Contate o administrador do sistema");
+            JOptionPane.showMessageDialog(this, "Senha inválida - Contate o administrador do sistema", "Erro", JOptionPane.ERROR_MESSAGE);
         }
+    } catch (Exception ex) {
+        Logger.getLogger(PasswordFrame.class.getName()).log(Level.SEVERE, null, ex);
+        JOptionPane.showMessageDialog(this, "Erro ao acessar o banco de dados - Contate o administrador do sistema", "Erro", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_nextButtonActionPerformed
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
-        LoginFrame loginFrame = new LoginFrame();
-        loginFrame.setVisible(true);
+        new LoginFrame().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_backButtonActionPerformed
 
@@ -122,6 +124,7 @@ public class PasswordFrame extends JFrame {
                 new PasswordFrame(null).setVisible(true);
             }
         });
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPasswordField PasswordField;
     private javax.swing.JButton backButton;

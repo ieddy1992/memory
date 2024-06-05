@@ -34,17 +34,17 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="idField" pref="97" max="32767" attributes="0"/>
+                      <Component id="idField" pref="177" max="32767" attributes="0"/>
                       <EmptySpace min="-2" pref="85" max="-2" attributes="0"/>
                   </Group>
                   <Component id="loginField" alignment="0" max="32767" attributes="0"/>
-                  <Component id="senhaField" max="32767" attributes="0"/>
-                  <Component id="sistemaField" max="32767" attributes="0"/>
+                  <Component id="senhaField" alignment="0" max="32767" attributes="0"/>
+                  <Component id="sistemaField" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
           </Group>
           <Group type="102" alignment="1" attributes="0">
-              <EmptySpace pref="62" max="32767" attributes="0"/>
+              <EmptySpace pref="142" max="32767" attributes="0"/>
               <Component id="cadastrarButton" min="-2" pref="226" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
           </Group>
@@ -86,6 +86,25 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
+    <Component class="javax.swing.JButton" name="cadastrarButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Cadastrar credenciais"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cadastrarButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JTextField" name="idField">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="idFieldActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JTextField" name="loginField">
+    </Component>
+    <Component class="javax.swing.JTextField" name="senhaField">
+    </Component>
+    <Component class="javax.swing.JTextField" name="sistemaField">
+    </Component>
     <Component class="javax.swing.JLabel" name="idLabel">
       <Properties>
         <Property name="text" type="java.lang.String" value="ID"/>
@@ -105,22 +124,6 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Sistema"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="cadastrarButton">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Cadastrar credenciais"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cadastrarButtonActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JTextField" name="idField">
-    </Component>
-    <Component class="javax.swing.JTextField" name="loginField">
-    </Component>
-    <Component class="javax.swing.JTextField" name="senhaField">
-    </Component>
-    <Component class="javax.swing.JTextField" name="sistemaField">
     </Component>
   </SubComponents>
 </Form>
