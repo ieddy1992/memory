@@ -1,18 +1,22 @@
 package com.mycompany.memory.gui;
 
+import com.mycompany.memory.controller.AppController;
 import com.mycompany.memory.model.User;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.*;
 import javax.swing.JOptionPane;
 
-public class AnswerFrame extends javax.swing.JFrame {
+public class AnswerFrame extends JFrame {
 
+    private JButton verifyButton;
+    private AppController controller;
     private User user;
 
-    public AnswerFrame(User user) {
+    public AnswerFrame(AppController controller, User user) {
+        this.controller = controller;
         this.user = user;
         initComponents();
     }
+
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -39,6 +43,11 @@ public class AnswerFrame extends javax.swing.JFrame {
         });
 
         recoveryButton.setText("Esqueci minhas respostas");
+        recoveryButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                recoveryButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -76,36 +85,24 @@ public class AnswerFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void enterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enterButtonActionPerformed
-        String answer1 = new String(answer1Field.getPassword());
-        String answer2 = new String(answer2Field.getPassword());
-
-        try {
-            if (user != null && answer1.equals(user.getPerguntaSecreta1()) && answer2.equals(user.getPerguntaSecreta2())) {
-                WelcomeFrame welcomeFrame = new WelcomeFrame(user);
-                welcomeFrame.setVisible(true);
-                this.dispose();
-            } else {
-                JOptionPane.showMessageDialog(this, "Credenciais inválidas, tente novamente.", "Erro", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(AnswerFrame.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, "Erro ao acessar o banco de dados - Contate o administrador do sistema", "Erro", JOptionPane.ERROR_MESSAGE);
+        String enteredAnswer1 = answer1Field.getText();
+        String enteredAnswer2 = answer2Field.getText();
+        if (enteredAnswer1.equals(user.getPerguntaSecreta1()) && enteredAnswer2.equals(user.getPerguntaSecreta2())) {
+            controller.showWelcomeFrame();
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Credenciais inválidas", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_enterButtonActionPerformed
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
-        new LoginFrame().setVisible(true);
+        controller.showLoginFrame();
         this.dispose();
     }//GEN-LAST:event_backButtonActionPerformed
 
-    public static void main(String args[]) {
-
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new AnswerFrame(null).setVisible(true);
-            }
-        });
-    }
+    private void recoveryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recoveryButtonActionPerformed
+        JOptionPane.showMessageDialog(this, "Contate o administrador do sistema");
+    }//GEN-LAST:event_recoveryButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPasswordField answer1Field;

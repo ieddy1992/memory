@@ -1,19 +1,23 @@
 package com.mycompany.memory.gui;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import com.mycompany.memory.model.User;
+import com.mycompany.memory.controller.AppController;
 import com.mycompany.memory.dao.UserDAO;
+import com.mycompany.memory.model.User;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class WelcomeFrame extends javax.swing.JFrame {
+import javax.swing.*;
 
+public class WelcomeFrame extends JFrame {
     private User user;
+    private AppController controller;
 
-    public WelcomeFrame(User user) {
+    public WelcomeFrame(AppController controller, User user) {
+        this.controller = controller;
         this.user = user;
         initComponents();
     }
-
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -72,9 +76,16 @@ public class WelcomeFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void visualizarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_visualizarButtonActionPerformed
-        CredenciaisFrame credenciaisFrame = new CredenciaisFrame();
+    CredenciaisFrame credenciaisFrame = null; // Declare aqui
+    try {
+        credenciaisFrame = new CredenciaisFrame(user);
         credenciaisFrame.setVisible(true);
         this.dispose();
+    } catch (SQLException ex) {
+        Logger.getLogger(WelcomeFrame.class.getName()).log(Level.SEVERE, null, ex);
+        // Lógica de tratamento de exceção, se necessário
+    }
+
     }//GEN-LAST:event_visualizarButtonActionPerformed
 
     private void credencialButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_credencialButtonActionPerformed
@@ -119,26 +130,4 @@ public class WelcomeFrame extends javax.swing.JFrame {
     private javax.swing.JButton credencialButton;
     private javax.swing.JButton visualizarButton;
     // End of variables declaration//GEN-END:variables
-public static void main(String args[]) {
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(WelcomeFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-
-        // Criando um usuário fictício para passar para o WelcomeFrame
-        User user = new User();
-        user.setLogin("username"); // Substitua "username" pelo login correto
-        user.setAdmin(true); // Indique se o usuário é um administrador
-
-        // Criando e exibindo o WelcomeFrame com o usuário fictício
-        java.awt.EventQueue.invokeLater(() -> {
-            new WelcomeFrame(user).setVisible(true);
-        });
-    }
 }

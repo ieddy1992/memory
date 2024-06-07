@@ -1,17 +1,21 @@
 package com.mycompany.memory.gui;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
 import javax.swing.JOptionPane;
 import com.mycompany.memory.dao.CredenciaisDAO;
 import com.mycompany.memory.model.Credenciais;
+import javax.swing.*;
+
+
+public class AdicionarFrame extends javax.swing.JFrame {
+
+    public AdicionarFrame() {
+        initComponents();
+    }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         cadastrarButton = new javax.swing.JButton();
-        idField = new javax.swing.JTextField();
         loginField = new javax.swing.JTextField();
         senhaField = new javax.swing.JTextField();
         sistemaField = new javax.swing.JTextField();
@@ -19,6 +23,7 @@ import com.mycompany.memory.model.Credenciais;
         LoginLabel = new javax.swing.JLabel();
         senhaLabel = new javax.swing.JLabel();
         sistemaLabel = new javax.swing.JLabel();
+        idField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -26,12 +31,6 @@ import com.mycompany.memory.model.Credenciais;
         cadastrarButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cadastrarButtonActionPerformed(evt);
-            }
-        });
-
-        idField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                idFieldActionPerformed(evt);
             }
         });
 
@@ -57,27 +56,24 @@ import com.mycompany.memory.model.Credenciais;
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(idField, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
-                        .addGap(85, 85, 85))
-                    .addComponent(loginField)
-                    .addComponent(senhaField)
-                    .addComponent(sistemaField))
-                .addGap(19, 19, 19))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(142, Short.MAX_VALUE)
-                .addComponent(cadastrarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(loginField, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                            .addComponent(senhaField)
+                            .addComponent(sistemaField))
+                        .addGap(19, 19, 19))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cadastrarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(idField, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(83, 83, 83)
-                        .addComponent(idLabel))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(idField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(80, 80, 80)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(idLabel)
+                    .addComponent(idField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(LoginLabel)
@@ -90,44 +86,41 @@ import com.mycompany.memory.model.Credenciais;
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(sistemaLabel)
                     .addComponent(sistemaField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addGap(42, 42, 42)
                 .addComponent(cadastrarButton)
-                .addGap(44, 44, 44))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void cadastrarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastrarButtonActionPerformed
-        int usuarioId = Integer.parseInt(idField.getText());
-        String sistema = sistemaField.getText();
-        String login = loginField.getText();
-        String senha = senhaField.getText();
+                try {
+            int usuarioId = Integer.parseInt(idField.getText());
+            String sistema = sistemaField.getText();
+            String login = loginField.getText();
+            String senha = senhaField.getText();
 
-        Credenciais credenciais = new Credenciais(usuarioId, sistema, login, senha);
+            Credenciais credenciais = new Credenciais();
+            credenciais.setUsuarioId(usuarioId);
+            credenciais.setSistema(sistema);
+            credenciais.setLogin(login);
+            credenciais.setSenha(senha);
 
-        CredenciaisDAO credenciaisDAO = new CredenciaisDAO();
-        boolean sucesso = credenciaisDAO.adicionarCredenciais(credenciais);
-        if (sucesso) {
-            JOptionPane.showMessageDialog(this, "Credenciais cadastradas com sucesso.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(this, "Erro ao cadastrar credenciais.", "Erro", JOptionPane.ERROR_MESSAGE);
+            CredenciaisDAO credenciaisDAO = new CredenciaisDAO();
+            boolean sucesso = credenciaisDAO.adicionarCredenciais(credenciais);
+            if (sucesso) {
+                JOptionPane.showMessageDialog(this, "Credenciais cadastradas com sucesso.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Erro ao cadastrar credenciais.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "ID deve ser um número.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_cadastrarButtonActionPerformed
 
-    private void idFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_idFieldActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -144,9 +137,7 @@ import com.mycompany.memory.model.Credenciais;
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(AdicionarFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
 
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new AdicionarFrame().setVisible(true);
