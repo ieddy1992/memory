@@ -3,6 +3,7 @@ package com.mycompany.memory.dao;
 import com.mycompany.memory.model.Credenciais;
 import com.mycompany.memory.model.User;
 import com.mycompany.memory.util.DatabaseConnection;
+import javax.swing.*;
 
 import java.sql.*;
 import java.util.ArrayList;
