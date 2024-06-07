@@ -1,16 +1,17 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- */
-
 package com.mycompany.memory;
 
-/**
- *
- * @author Ederson
- */
+import com.mycompany.memory.controller.AppController;
+import com.mycompany.memory.gui.LoginFrame;
+
 public class Memory {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        AppController controller = new AppController();
+
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                controller.showLoginFrame();
+            }
+        });
     }
 }
